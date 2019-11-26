@@ -1,10 +1,10 @@
 server:
-  port: 38080
+  port: 9002
 
 #指定注册中心地址
 eureka:
   instance:
-    hostname: 39.105.82.150
+    hostname: localhost
   client:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/parkyy_service/

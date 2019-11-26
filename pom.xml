@@ -6,7 +6,7 @@
     <groupId>com.xianglei</groupId>
     <artifactId>parkyy_service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>parkyy_service</name>
 
