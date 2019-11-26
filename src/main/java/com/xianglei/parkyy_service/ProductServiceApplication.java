@@ -8,12 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class ProductServiceApplication extends SpringBootServletInitializer {
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(ProductServiceApplication.class);
-    }
+public class ProductServiceApplication {
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(ProductServiceApplication.class, args);
