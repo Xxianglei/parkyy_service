@@ -31,17 +31,10 @@ spring:
     port: 6379
     password:
     timeout: PT30M
-  cloud:
-    sentinel:
-      enabled: true
-      transport:
-        dashboard: 127.0.0.1:8999
-        port: 8020
-
     nacos:
       discovery:
         server-addr: 120.26.184.125:8848
-        port: 9003
+        port: 9002
         ip: 39.105.82.150
 # 日志打印
 logging:
@@ -49,7 +42,3 @@ logging:
 
 mybatis:
   type-aliases-package: com.xianglei.pay_service.domain
-
-feign:
-  sentinel:
-    enabled: true
