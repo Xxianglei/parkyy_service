@@ -1,4 +1,4 @@
-package com.xianglei.parkyy_service.domain;
+package com.xianglei.pay_service.domain;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.xianglei.parkyy_service;
+package com.xianglei.pay_service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
