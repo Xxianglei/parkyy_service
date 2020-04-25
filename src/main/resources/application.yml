@@ -31,6 +31,7 @@ spring:
     port: 6379
     password:
     timeout: PT30M
+  cloud:
     nacos:
       discovery:
         server-addr: 120.26.184.125:8848
