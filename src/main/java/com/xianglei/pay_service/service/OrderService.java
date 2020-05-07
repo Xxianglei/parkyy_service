@@ -15,7 +15,6 @@ import java.util.List;
  */
 public interface OrderService {
 
-    int deleteOrders(List<String> flows);
 
     List<PreBsOrder>  getMyOrders(String userId, String orderId);
 
@@ -27,5 +26,5 @@ public interface OrderService {
 
     int insertOrder(BsOrder bsOrder);
 
-    int releaseParkInfo(String flowId);
+    int releaseParkInfo(String flowId,String userId);
 }

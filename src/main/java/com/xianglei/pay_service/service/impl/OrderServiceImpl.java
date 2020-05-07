@@ -39,18 +39,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     ParkMapper parkMapper;
 
-    @Transactional
-    @Override
-    public int deleteOrders(List<String> flowIds) {
-        int nums = orderMapper.deleteBatchIds(flowIds);
-        // 找到对应车位，释放车位
-        for (String flowId : flowIds) {
-            releaseParkInfo(flowId);
-        }
-        return nums;
-    }
-
-
     @Override
     public List<PreBsOrder> getMyOrders(String userId, String orderId) {
         QueryWrapper<BsOrder> bsOrderQueryWrapper = new QueryWrapper<>();
@@ -141,6 +129,9 @@ public class OrderServiceImpl implements OrderService {
             }
             if (Tools.isNotNull(myOrder)) {
                 myOrder.setCharge("1");
+                String userId = myOrder.getUserId();
+                // 清楚临时占用
+                releaseParkInfo(flowId,userId);
             }
         }
         return orderMapper.updateById(myOrder);
@@ -164,14 +155,16 @@ public class OrderServiceImpl implements OrderService {
         return insert;
     }
 
+    @Transactional
     @Override
-    public int releaseParkInfo(String flowId) {
+    public int releaseParkInfo(String flowId, String userId) {
         QueryWrapper<BsParkInfo> objectQueryWrapper = new QueryWrapper<>();
         objectQueryWrapper.eq("FLOW_ID", flowId);
         BsParkInfo parkInfo = parkInfoMapper.selectOne(objectQueryWrapper);
-        parkInfo.setStatus("1");
-        // 临时拥有者设置为空
-        parkInfo.setTempOwner("");
+        // 当前临时拥有者设置为空
+        String tempOwner = parkInfo.getTempOwner();
+        String replace = tempOwner.replace(userId + "@", "");
+        parkInfo.setTempOwner(replace);
         return parkInfoMapper.updateById(parkInfo);
     }
 
