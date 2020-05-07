@@ -16,15 +16,7 @@ import java.util.List;
 public interface OrderService {
 
 
-    List<PreBsOrder>  getMyOrders(String userId, String orderId);
-
-    int updateOrder(BsOrder bsOrder);
-
     int updateOrder(String flowId) throws RuntimeException;
-
-    int updateParkStatus(String flowId, String userId);
-
-    int insertOrder(BsOrder bsOrder);
 
     int releaseParkInfo(String flowId,String userId);
 }

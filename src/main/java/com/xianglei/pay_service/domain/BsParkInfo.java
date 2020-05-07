@@ -20,11 +20,6 @@ public class BsParkInfo implements Serializable, Cloneable {
     @TableField("PARK_NUM")
     private String parkNum;
     /**
-     * 0/1/2 不可用/有车/预约
-     */
-    @TableField("STATUS")
-    private String status;
-    /**
      * 车位长度
      */
     @TableField("LENGTH")
@@ -58,14 +53,6 @@ public class BsParkInfo implements Serializable, Cloneable {
 
     public void setParkNum(String parkNum) {
         this.parkNum = parkNum;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Double getLength() {

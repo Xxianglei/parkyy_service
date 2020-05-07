@@ -39,82 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     ParkMapper parkMapper;
 
-    @Override
-    public List<PreBsOrder> getMyOrders(String userId, String orderId) {
-        QueryWrapper<BsOrder> bsOrderQueryWrapper = new QueryWrapper<>();
-        bsOrderQueryWrapper.eq("USER_ID", userId);
-        bsOrderQueryWrapper.orderByDesc("CREATE_TIME");
-        if (!StringUtils.isEmpty(orderId)) {
-            bsOrderQueryWrapper.eq("FLOW_ID", orderId);
-        }
-        List<PreBsOrder> list = new ArrayList<>();
-        List<BsOrder> bsOrders = orderMapper.selectList(bsOrderQueryWrapper);
-        for (BsOrder bsOrder : bsOrders) {
-            if ("0".equals(bsOrder.getCharge())) {
-                bsOrder.setCharge(OrderStatusEnum.NO_PAY.getName());
-            } else if ("1".equals(bsOrder.getCharge())) {
-                bsOrder.setCharge(OrderStatusEnum.PAYED.getName());
-            } else {
-                bsOrder.setCharge(OrderStatusEnum.EXPIRE.getName());
-            }
-            if ("0".equals(bsOrder.getEvening())) {
-                bsOrder.setEvening(DateEnum.DAY.getName());
-            } else {
-                bsOrder.setEvening(DateEnum.NIGHT.getName());
-            }
-            PreBsOrder preBsOrder = new PreBsOrder();
-            // 时间格式化
-            if (bsOrder.getStartTime() != null && bsOrder.getLeaveTime() != null && bsOrder.getCreateTime() != null) {
-                String startTime = DateUtils.format(bsOrder.getStartTime(), "yyyy-MM-dd HH:mm:ss");
-                preBsOrder.setStartTime(startTime);
-                String endTime = DateUtils.format(bsOrder.getLeaveTime(), "yyyy-MM-dd HH:mm:ss");
-                preBsOrder.setLeaveTime(endTime);
-                String createTime = DateUtils.format(bsOrder.getCreateTime(), "yyyy-MM-dd HH:mm:ss");
-                preBsOrder.setCreateTime(createTime);
-            }
-            String parkId = bsOrder.getParkId();
-            // 获取停车场对象
-            BsPark bsPark = parkMapper.selectById(parkId);
-            // 获取停车场名字
-            String parkName = bsPark.getParkName();
-            preBsOrder.setParkName(parkName);
-            // 获取停车场位置
-            String location = bsPark.getLocation();
-            preBsOrder.setLocation(location);
-            // todo 价格计算
-            preBsOrder.setPrice(10.20);
-            preBsOrder.setFlowId(bsOrder.getFlowId());
-            preBsOrder.setUserId(userId);
-            preBsOrder.setCarNum(bsOrder.getCarNum());
-            preBsOrder.setParkInfoId(bsOrder.getParkInfoId());
-            preBsOrder.setParkId(bsOrder.getParkId());
-            preBsOrder.setEvening(bsOrder.getEvening());
-            preBsOrder.setCharge(bsOrder.getCharge());
-            list.add(preBsOrder);
-        }
-        return list;
-    }
 
-    @Override
-    public int updateOrder(BsOrder bsOrder) {
-        // 查到原来的订单信息
-        BsOrder myOrder = orderMapper.selectById(bsOrder.getFlowId());
-        if (StringUtils.isNotEmpty(bsOrder.getEvening())) {
-            myOrder.setEvening(bsOrder.getEvening());
-        }
-        if (bsOrder.getStartTime() != null) {
-            myOrder.setStartTime(bsOrder.getStartTime());
-        }
-        if (bsOrder.getLeaveTime() != null) {
-            myOrder.setLeaveTime(bsOrder.getLeaveTime());
-        }
-        if (StringUtils.isNotEmpty(bsOrder.getCarNum())) {
-            myOrder.setCarNum(bsOrder.getCarNum());
-        }
-        int i = orderMapper.updateById(myOrder);
-        //更新订单信息
-        return i;
-    }
 
     @Transactional
     @Override
@@ -135,24 +60,6 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         return orderMapper.updateById(myOrder);
-    }
-
-    @Override
-    public int updateParkStatus(String flowId, String userId) {
-        BsParkInfo parkInfo = parkInfoMapper.selectById(flowId);
-        int num = 0;
-        if (Tools.isNotNull(parkInfo)) {
-            parkInfo.setStatus("0");
-            parkInfo.setTempOwner(userId);
-            num = parkInfoMapper.update(parkInfo, new UpdateWrapper<BsParkInfo>().ne("STATUS", 0));
-        }
-        return num;
-    }
-
-    @Override
-    public int insertOrder(BsOrder bsOrder) {
-        int insert = orderMapper.insert(bsOrder);
-        return insert;
     }
 
     @Transactional
