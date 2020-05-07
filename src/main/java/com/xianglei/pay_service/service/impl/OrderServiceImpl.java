@@ -2,26 +2,17 @@ package com.xianglei.pay_service.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.xianglei.pay_service.common.DateEnum;
-import com.xianglei.pay_service.common.OrderStatusEnum;
-import com.xianglei.pay_service.common.utils.DateUtils;
 import com.xianglei.pay_service.common.utils.Tools;
 import com.xianglei.pay_service.domain.BsOrder;
-import com.xianglei.pay_service.domain.BsPark;
 import com.xianglei.pay_service.domain.BsParkInfo;
-import com.xianglei.pay_service.domain.PreBsOrder;
 import com.xianglei.pay_service.mapper.OrderMapper;
 import com.xianglei.pay_service.mapper.ParkInfoMapper;
 import com.xianglei.pay_service.mapper.ParkMapper;
 import com.xianglei.pay_service.service.OrderService;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Auther: Xianglei
@@ -70,8 +61,10 @@ public class OrderServiceImpl implements OrderService {
         BsParkInfo parkInfo = parkInfoMapper.selectOne(objectQueryWrapper);
         // 当前临时拥有者设置为空
         String tempOwner = parkInfo.getTempOwner();
-        String replace = tempOwner.replace(userId + "@", "");
-        parkInfo.setTempOwner(replace);
+        if(StringUtils.isNotEmpty(tempOwner)){
+            String replace = tempOwner.replace(userId + "@", "");
+            parkInfo.setTempOwner(replace);
+        }
         return parkInfoMapper.updateById(parkInfo);
     }
 
