@@ -48,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
                 String userId = myOrder.getUserId();
                 // 清楚临时占用
               //  releaseParkInfo(flowId,userId);
+
             }
         }
         return orderMapper.updateById(myOrder);
